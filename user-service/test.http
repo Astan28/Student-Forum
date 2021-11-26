@@ -1,0 +1,34 @@
+### GET ALL USERS
+GET http://localhost:5001/users
+
+### GET USER
+GET http://localhost:5001/users/1
+
+### POST USER
+POST http://localhost:5001/users
+Content-Type: application/json
+
+{
+    "name": "Ala",
+    "password": "Alamakota",
+    "email": "Ala@gmail.com",
+    "role": "USER",
+    "semester": "5",
+    "group": "TIN"
+}
+### DELETE USER
+DELETE http://localhost:5001/users/1
+
+### UPDATE USER
+PUT http://localhost:5001/users/1
+Content-Type: application/json
+
+{
+    "name": "Astan",
+    "password": "updatesiema123",
+    "email": "astan@gmail.com",
+    "role": "ADMIN",
+    "course": "IT specialist",
+    "semester": "7",
+    "group": "ION"
+  }
