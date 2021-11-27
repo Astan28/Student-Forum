@@ -28,7 +28,7 @@ Content-Type: application/json
     "password": "updatesiema123",
     "email": "astan@gmail.com",
     "role": "ADMIN",
-    "course": "IT specialist",
+    "course": "Graphic artist",
     "semester": "7",
     "group": "ION"
   }
