@@ -10,6 +10,7 @@ fastify.register(require('fastify-swagger'), {
 fastify.register(require('./routes/users'))
 const PORT = 5001
 
+
 const start = async () => {
     try {
         await fastify.listen(PORT)

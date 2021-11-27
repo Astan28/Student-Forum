@@ -15,14 +15,14 @@ const getUser = (req, reply) => {
 }
 
 const registerUser = (req, reply) => {
-    const { name, password, email, role, semester, group } = req.body;
+    const { name, password, email, role, course, semester, group } = req.body;
   const user = {
     id: uuidv4(),
     name,
     password,
     email,
     role,
-    course: JSON.stringify(courses),
+    course,
     semester,
     group
   };

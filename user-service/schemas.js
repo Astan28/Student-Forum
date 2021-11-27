@@ -5,6 +5,8 @@ IT: "IT specialist",
 GR: "Graphic artist"
 }
 
+console.log(courses)
+
 const User = {
     type: "object",
     properties: {
@@ -116,6 +118,7 @@ const User = {
     getUsersOpts,
     getUserOpts,
     registerUserOpts,
+    loginUserOpts,
     deleteUserOpts,
     updateUserOpts,
     courses
