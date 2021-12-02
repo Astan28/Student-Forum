@@ -2,7 +2,7 @@
 GET http://localhost:5001/users
 
 ### GET USER
-GET http://localhost:5001/users/1
+GET http://localhost:5001/users/61a60c383cb13d0ca5e99a59
 
 ### POST USER
 POST http://localhost:5001/users
@@ -13,6 +13,7 @@ Content-Type: application/json
     "password": "Alamakota",
     "email": "Ala@gmail.com",
     "role": "USER",
+    "course": "Graphic artist",
     "semester": "5",
     "group": "TIN"
 }
