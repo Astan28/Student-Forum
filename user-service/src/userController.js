@@ -1,17 +1,14 @@
 'use strict';
 
 const config = require('config');
-
-const { mongoUrl } = config;
-
 const mongoose = require('mongoose');
-
 const md5 = require('crypto-js/md5');
 const jwt = require('jsonwebtoken');
-
 const User = require('./User');
 
+const { mongoUrl } = config;
 const secret = process.env.JWT_SECRET || 'secret';
+console.log(secret);
 
 mongoose.connect(mongoUrl);
 
@@ -26,6 +23,8 @@ const getUser = async (req, reply) => {
 
   // const user = users.find(user => user.id === id);
   const user = await User.findById(id);
+  delete user.password;
+
   reply.send(user);
 };
 
@@ -99,28 +98,31 @@ const deleteUser = (req, reply) => {
   reply.send({ message: `User ${id} has been removed` });
 };
 
-const updateUser = (req, reply) => {
+const updateUser = async (req, reply) => {
   const { id } = req.params;
-  const {
-    name, password, email, role, course, semester, group
-  } = req.body;
-  // const users = users.map(user => (user.id === id ? {
-  //   id, name, password, email, role, course, semester, group
-  // } : user));
-  // const user = users.find(user => user.id === id);
-
-  User.findById(id).then(user => {
-    user.name = name;
-    user.password = password;
-    user.email = email;
-    user.role = role;
-    user.role = role;
-    user.course = course;
-    user.semester = semester;
-    user.group = group;
-    user.save();
-    reply.send(user);
-  });
+  const { password } = req.body;
+  const user = await User.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: true });
+  if (password) {
+    const hashedPassword = md5(password).toString();
+    user.password = hashedPassword;
+  }
+  user.save();
+  reply.send(user);
+  // const {
+  //   name, password, email, role, course, semester, group
+  // } = req.body;
+  // const hashedPassword = md5(password).toString();
+  // User.findById(id).then(user => {
+  //   user.name = name;
+  //   user.password = hashedPassword;
+  //   user.email = email;
+  //   user.role = role;
+  //   user.course = course;
+  //   user.semester = semester;
+  //   user.group = group;
+  //   user.save();
+  //   reply.send(user);
+  // });
 };
 
 module.exports = {

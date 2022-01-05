@@ -1,3 +1,17 @@
+'use strict';
+
+const config = require('config');
+
+console.log('config ', config);
+
+const { jwtSecret } = config;
+
+const { checkRole, createVerifyToken, checkId } = require('common/lib/verify-token');
+
+console.log(jwtSecret);
+const { verifyToken } = createVerifyToken(jwtSecret);
+console.log(verifyToken);
+
 const {
   getUsersSchema,
   getUserSchema,
@@ -22,11 +36,11 @@ function userRoutes(fastify, options, done) {
 
   fastify.post('/users', { schema: registerUserSchema }, registerUser);
 
-  // fastify.post('/login', {schema: loginUserSchema}, loginUser)
+  fastify.post('/login', { schema: loginUserSchema }, loginUser);
 
   fastify.delete('/users/:id', { schema: deleteUserSchema }, deleteUser);
 
-  fastify.put('/users/:id', { schema: updateUserSchema }, updateUser);
+  fastify.put('/users/:id', { schema: updateUserSchema, preHandler: [verifyToken, checkId, checkRole] }, updateUser);
 
   done();
 }

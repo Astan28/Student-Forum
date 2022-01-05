@@ -2,34 +2,38 @@
 GET http://localhost:5001/users
 
 ### GET USER
-GET http://localhost:5001/users/61a60c383cb13d0ca5e99a59
+GET http://localhost:5001/users/61a8e3ac97e933adfd70a3e7
 
-### POST USER
+### REGISTER USER
 POST http://localhost:5001/users
 Content-Type: application/json
 
 {
-    "name": "Ala",
-    "password": "Alamakota",
-    "email": "Ala@gmail.com",
-    "role": "USER",
-    "course": "Graphic artist",
-    "semester": "5",
-    "group": "TIN"
+    "name": "Astan",
+    "password": "astanadmin",
+    "email": "Astan@gmail.com",
+    "role": "ADMIN",
+    "course": "IT specialist",
+    "semester": "7",
+    "group": "ION"
 }
 ### DELETE USER
-DELETE http://localhost:5001/users/1
+DELETE http://localhost:5001/users/61a8e0fc237658c7685abf23
 
 ### UPDATE USER
-PUT http://localhost:5001/users/1
+PUT http://localhost:5001/users/61ab8ff990ce06c8b9a33e84
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYjg5YTJmYzk2NGY1ZjBkYmEzYWJjMyIsIm5hbWUiOiJBc3RhbiIsImVtYWlsIjoiQXN0YW5AZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiY291cnNlIjoiSVQgc3BlY2lhbGlzdCIsInNlbWVzdGVyIjoiNyIsImdyb3VwIjoiSU9OIiwiaWF0IjoxNjM5NDg4MDYyfQ.vkDoWnepDhSAexv6WoSH5zBiLw5o6YUvtckjr9yyO_0
+Content-Type: application/json
+
+{
+    "password": "Olamakota"
+}
+
+### LOGIN USER
+POST http://localhost:5001/login
 Content-Type: application/json
 
 {
     "name": "Astan",
-    "password": "updatesiema123",
-    "email": "astan@gmail.com",
-    "role": "ADMIN",
-    "course": "Graphic artist",
-    "semester": "7",
-    "group": "ION"
-  }
+    "password": "astanadmin"
+}

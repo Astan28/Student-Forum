@@ -1,3 +1,4 @@
 {
-    mongoUrl: 'MONGOURL'
+    mongoUrl: 'DB_URL',
+    jwtSecret: 'JWT_SECRET'
 }
