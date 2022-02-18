@@ -4,9 +4,9 @@ require('dotenv').config();
 
 const config = require('config');
 
-const fastify = require('fastify')({ logger: true });
+console.log(config);
 
-fastify.register(require('fastify-multipart'));
+const fastify = require('fastify')({ logger: true });
 
 fastify.register(require('fastify-swagger'), {
   exposeRoute: true,
@@ -15,10 +15,9 @@ fastify.register(require('fastify-swagger'), {
     info: { title: 'fastify-api' },
   },
 });
-
 fastify.register(require('./src/routes'));
 
-const { port } = config;
+const port = process.env.PORT || 3000;
 
 const start = async () => {
   try {

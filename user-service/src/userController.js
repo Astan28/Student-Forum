@@ -12,6 +12,13 @@ console.log(secret);
 
 mongoose.connect(mongoUrl);
 
+function checkPermissions(user, id) {
+  console.log(user.id);
+  console.log(id);
+  if (user.id === id || user.role === 'ADMIN') return true;
+  return false;
+}
+
 const getUsers = async (req, reply) => {
   // const users = await fastify.mongoDb.collection('users');
   const users = await User.find();
@@ -86,43 +93,35 @@ const loginUser = async (req, reply) => {
 
 const deleteUser = (req, reply) => {
   const { id } = req.params;
+  const loggedUser = req.user;
 
   // const users = users.filter(user => user.id !== id);
-  User.findByIdAndDelete(id, (err, docs) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('Removed User : ', docs);
-    }
-  });
-  reply.send({ message: `User ${id} has been removed` });
+  if (checkPermissions(loggedUser, id)) {
+    User.findByIdAndDelete(id, (err, docs) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('Removed User : ', docs);
+      }
+    });
+    reply.send({ message: `User ${id} has been removed` });
+  }
 };
 
 const updateUser = async (req, reply) => {
+  const loggedUser = req.user;
+  // console.log('loggedUser: ', loggedUser);
   const { id } = req.params;
-  const { password } = req.body;
-  const user = await User.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: true });
-  if (password) {
-    const hashedPassword = md5(password).toString();
-    user.password = hashedPassword;
-  }
-  user.save();
-  reply.send(user);
-  // const {
-  //   name, password, email, role, course, semester, group
-  // } = req.body;
-  // const hashedPassword = md5(password).toString();
-  // User.findById(id).then(user => {
-  //   user.name = name;
-  //   user.password = hashedPassword;
-  //   user.email = email;
-  //   user.role = role;
-  //   user.course = course;
-  //   user.semester = semester;
-  //   user.group = group;
-  //   user.save();
-  //   reply.send(user);
-  // });
+  if (checkPermissions(loggedUser, id)) {
+    const { password } = req.body;
+    const user = await User.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: true });
+    if (password) {
+      const hashedPassword = md5(password).toString();
+      user.password = hashedPassword;
+    }
+    user.save();
+    reply.send(user);
+  } else reply.code(403).send();
 };
 
 module.exports = {

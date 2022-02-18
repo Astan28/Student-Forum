@@ -1,7 +1,39 @@
 'use strict';
 
-const fastify = require('fastify');
 const multer = require('fastify-multer');
+const config = require('config');
+const mongoose = require('mongoose');
+const fs = require('fs');
+const { promisify } = require('util');
+
+const fastify = require('fastify')();
+const uploadPath = require('path');
+
+const File = require('./File');
+
+fastify.register(require('fastify-static'), {
+  root: uploadPath.join(__dirname, 'public/uploads'),
+  prefix: '/public/',
+  list: {
+    format: 'html',
+    render: (dirs, files) => `
+<html><body>
+<ul>
+  ${dirs.map(dir => `<li><a href="${dir.href}">${dir.name}</a></li>`).join('\n  ')}
+</ul>
+<ul>
+  ${files.map(file => `<li><a href="${file.href}" target="_blank">${file.name}</a></li>`).join('\n  ')}
+</ul>
+</body></html>
+`,
+  }
+});
+
+const unlinkAsync = promisify(fs.unlink);
+
+const { mongoUrl } = config;
+
+mongoose.connect(mongoUrl);
 
 // const imageFilter = function (req, file, cb) {
 //   if (
@@ -27,26 +59,75 @@ const limitsUpload = {
 //   filename: imageName
 // });
 
-const fileUploaded = function (req, reply) {
-  console.log(req.file);
-  // console.log(req.body);
-  console.log('file has been uploaded');
-  reply.code(200).send('SUCCESS');
-};
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, '../public/uploads/');
+    cb(null, 'public/uploads/');
   },
   filename(req, file, cb) {
     const extArray = file.mimetype.split('/');
     const extension = extArray[extArray.length - 1];
     cb(null, `${file.fieldname}-${Date.now()}.${extension}`);
-  }
+  },
 });
 
 const upload = multer({ storage, limits: limitsUpload });
 
+const fieldsUpload = upload.single('file');
+
+const getFiles = async (req, reply) => {
+  const files = await File.find();
+  reply.send(files);
+};
+
+const getFile = async (req, reply) => {
+  const { id } = req.params;
+
+  // const user = users.find(user => user.id === id);
+  const file = await File.findById(id);
+
+  reply.send(file);
+};
+
+const uploadFile = async (req, reply) => {
+  console.log('req', req.file);
+  const { thread, post } = req.body;
+  const name = req.file.filename;
+  const path = req.file.destination;
+  // const filename = JSON.stringify(req.file);
+  // console.log('filename', filename);
+  const file = new File({
+    name,
+    path,
+    thread,
+    post
+  });
+  file.save();
+  // reply.code(200).send('SUCCESS');
+  reply.code(201).send(file);
+};
+
+const deleteFile = async (req, reply) => {
+  const { id } = req.params;
+
+  const file = await File.findById(id);
+  console.log('file: ', file);
+
+  File.findByIdAndDelete(id, (err, docs) => {
+    if (err) {
+      console.log(err);
+    } else {
+      const filepath = (docs.path + docs.name);
+      console.log(filepath);
+      unlinkAsync(filepath);
+      console.log('Removed File : ', docs);
+    }
+  });
+  reply.send({ message: `Post ${id} has been removed` });
+};
 module.exports = {
-  fileUploaded,
-  upload
+  uploadFile,
+  fieldsUpload,
+  getFiles,
+  getFile,
+  deleteFile
 };

@@ -2,8 +2,6 @@
 
 const jwt = require('jsonwebtoken');
 
-
-
 // const authorization = async (req, res, next) => {
 //     const {authHeader} = req.headers;
     
@@ -32,27 +30,30 @@ function createVerifyToken (secret) {
           if (err) return reply.code(403).send();
           req.user = user
           console.log('user',  user)
-          next()
+          
         })
+        next();
       }
       return {verifyToken}
-}
-
-
- function checkRole  (req, reply, next) {
-    const {user} = req;
-    console.log(req.error)
-    
-    if (user.role === 'USER' && req.error === 'id is not correct')  return reply.code(403).send();
-    next();
 }
 
 function checkId  (req, reply, next) {
   const {user} = req;
   console.log('zalogowany uzytkownik: ',  user)
-  if (!user.id === req.params.id) req.error = 'id is not correct';
+  if (user.id !== req.params.id) req.error = 'id is not correct';
   next(); 
 }
+
+
+ function checkRole  (req, reply, next) {
+    const {user} = req;
+    console.log('req.error ', req.error)
+    
+    if (user.role === 'USER' && req.error === 'id is not correct')  return reply.code(403).send();
+    next();
+}
+
+
 
 module.exports = {
     createVerifyToken,
