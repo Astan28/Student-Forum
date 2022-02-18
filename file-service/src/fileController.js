@@ -11,23 +11,23 @@ const uploadPath = require('path');
 
 const File = require('./File');
 
-fastify.register(require('fastify-static'), {
-  root: uploadPath.join(__dirname, 'public/uploads'),
-  prefix: '/public/',
-  list: {
-    format: 'html',
-    render: (dirs, files) => `
-<html><body>
-<ul>
-  ${dirs.map(dir => `<li><a href="${dir.href}">${dir.name}</a></li>`).join('\n  ')}
-</ul>
-<ul>
-  ${files.map(file => `<li><a href="${file.href}" target="_blank">${file.name}</a></li>`).join('\n  ')}
-</ul>
-</body></html>
-`,
-  }
-});
+// fastify.register(require('fastify-static'), {
+//   root: uploadPath.join(__dirname, 'public/uploads'),
+//   prefix: '/public/',
+//   list: {
+//     format: 'html',
+//     render: (dirs, files) => `
+// <html><body>
+// <ul>
+//   ${dirs.map(dir => `<li><a href="${dir.href}">${dir.name}</a></li>`).join('\n  ')}
+// </ul>
+// <ul>
+//   ${files.map(file => `<li><a href="${file.href}" target="_blank">${file.name}</a></li>`).join('\n  ')}
+// </ul>
+// </body></html>
+// `,
+//   }
+// });
 
 const unlinkAsync = promisify(fs.unlink);
 
@@ -49,7 +49,7 @@ mongoose.connect(mongoUrl);
 
 const limitsUpload = {
   fileSize: 1000000, // 15MB 15*1048576
-  files: 1
+  files: 3
 };
 
 // const upload = multer({
@@ -72,7 +72,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage, limits: limitsUpload });
 
-const fieldsUpload = upload.single('file');
+const fieldsUpload = upload.any('files');
+// const fieldsUpload = upload.single('file');
 
 const getFiles = async (req, reply) => {
   const files = await File.find();
@@ -89,21 +90,26 @@ const getFile = async (req, reply) => {
 };
 
 const uploadFile = async (req, reply) => {
-  console.log('req', req.file);
-  const { thread, post } = req.body;
-  const name = req.file.filename;
-  const path = req.file.destination;
-  // const filename = JSON.stringify(req.file);
-  // console.log('filename', filename);
-  const file = new File({
-    name,
-    path,
-    thread,
-    post
+  console.log('req', req.files);
+  const { files } = req;
+  files.forEach(element => {
+    console.log('file: ', element);
+    const { thread, post } = req.body;
+    const name = element.filename;
+    const path = element.destination;
+    // const filename = JSON.stringify(req.file);
+    // console.log('filename', filename);
+    const file = new File({
+      name,
+      path,
+      thread,
+      post
+    });
+    console.log(file);
+    file.save();
+    // reply.code(200).send('SUCCESS');
   });
-  file.save();
-  // reply.code(200).send('SUCCESS');
-  reply.code(201).send(file);
+  reply.code(201).send(files);
 };
 
 const deleteFile = async (req, reply) => {
