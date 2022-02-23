@@ -13,7 +13,9 @@ function checkPermissions(user) {
 }
 
 const getBoards = async (req, reply) => {
-  const boards = await Board.find();
+  let boards;
+  if (req.query) boards = await Board.find(req.query);
+  else await Board.find();
   reply.send(boards);
 };
 

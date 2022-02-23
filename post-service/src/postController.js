@@ -12,7 +12,9 @@ function checkPermissions(user, authorId) {
   return false;
 }
 const getPosts = async (req, reply) => {
-  const posts = await Post.find();
+  let posts;
+  if (req.query) posts = await Post.find(req.query);
+  else posts = await Post.find();
   reply.send(posts);
 };
 

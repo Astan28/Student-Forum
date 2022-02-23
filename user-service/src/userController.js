@@ -21,7 +21,9 @@ function checkPermissions(user, id) {
 
 const getUsers = async (req, reply) => {
   // const users = await fastify.mongoDb.collection('users');
-  const users = await User.find();
+  let users;
+  if (req.query) users = await User.find(req.query);
+  else users = await User.find();
   reply.send(users);
 };
 

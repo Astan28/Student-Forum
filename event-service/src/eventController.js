@@ -1,0 +1,98 @@
+'use strict';
+
+const config = require('config');
+const mongoose = require('mongoose');
+const Event = require('./Event');
+
+const { mongoUrl } = config;
+
+mongoose.connect(mongoUrl);
+
+function checkPermissions(user, authorId) {
+  if (user.id === authorId || user.role === 'ADMIN') return true;
+  return false;
+}
+
+const getEvents = async (req, reply) => {
+  let events;
+  if (req.query) events = await Event.find(req.query);
+  else events = await Event.find();
+  reply.send(events);
+};
+
+const getEvent = async (req, reply) => {
+  const { id } = req.params;
+
+  // const user = users.find(user => user.id === id);
+  const event = await event.findById(id);
+  reply.send(event);
+};
+
+const createEvent = async (req, reply) => {
+  const {
+    name, description, startDate, finishDate
+  } = req.body;
+  const author = req.user.id;
+  const { semester, group } = req.user;
+  console.log(author);
+
+  const event = new Event({
+    name, description, author, semester, group, startDate, finishDate
+  });
+  event.save();
+  reply.code(201).send(event);
+  // if (checkPermissions(loggedUser)) {
+  //   const today = new Date();
+  //   const date = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+  //   const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+  //   const createdAt = `${date} ${time}`;
+  //   const updatedAt = null;
+  //   const event = new Board({
+  //     name,
+  //     author,
+  //     createdAt,
+  //     updatedAt
+  //   });
+  //   event.save();
+  //   reply.code(201).send(event);
+  // } else
+  reply.code(403).send();
+};
+
+const deleteEvent = (req, reply) => {
+  const { id } = req.params;
+  const loggedUser = req.user;
+
+  const event = Event.findById(id);
+  const authorId = event.author;
+  if (checkPermissions(loggedUser, authorId)) {
+    Event.findByIdAndDelete(id, (err, docs) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('Removed Event : ', docs);
+      }
+    });
+    reply.send({ message: `Event ${id} has been removed` });
+  } else reply.code(403).send();
+};
+
+const updateEvent = async (req, reply) => {
+  const { id } = req.params;
+  const event = await Event.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: false });
+  console.log('event ', event);
+  const loggedUser = req.user;
+  const authorId = event.author;
+  if (checkPermissions(loggedUser, authorId)) {
+    event.save();
+    reply.send(event);
+  } else reply.code(403).send();
+};
+
+module.exports = {
+  getEvent,
+  getEvents,
+  createEvent,
+  deleteEvent,
+  updateEvent
+};

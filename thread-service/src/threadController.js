@@ -13,7 +13,9 @@ function checkPermissions(user, authorId) {
 }
 
 const getThreads = async (req, reply) => {
-  const threads = await Thread.find();
+  let threads;
+  if (req.query) threads = await Thread.find(req.query);
+  else threads = await Thread.find();
   reply.send(threads);
 };
 
