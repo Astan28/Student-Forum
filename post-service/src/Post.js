@@ -11,13 +11,14 @@ const postSchema = new mongoose.Schema({
     ref: 'Thread'
   },
   author: {
-    type: String
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   },
   createdAt: {
-    type: String
+    type: Date
   },
   updatedAt: {
-    type: String
+    type: Date
   },
 });
 

@@ -11,17 +11,18 @@ const threadSchema = new mongoose.Schema({
     type: String
   },
   author: {
-    type: String
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   },
   board: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Board'
   },
   createdAt: {
-    type: String
+    type: Date
   },
   updatedAt: {
-    type: String
+    type: Date
   },
 });
 
