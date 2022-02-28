@@ -29,7 +29,7 @@ const getBoard = async (req, reply) => {
 
 const createBoard = async (req, reply) => {
   const {
-    name
+    name, course, semester, group
   } = req.body;
   const author = req.user.id;
   const loggedUser = req.user;
@@ -42,6 +42,9 @@ const createBoard = async (req, reply) => {
     const updatedAt = null;
     const board = new Board({
       name,
+      course,
+      semester,
+      group,
       author,
       createdAt,
       updatedAt

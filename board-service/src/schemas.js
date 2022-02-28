@@ -5,6 +5,9 @@ const Board = {
   properties: {
     _id: { type: 'string' },
     name: { type: 'string' },
+    course: { type: 'string' },
+    semester: { type: 'string' },
+    group: { type: 'string' },
     author: { type: 'string' },
     threads: { type: 'array' },
     createdAt: { type: 'string' },
@@ -38,6 +41,9 @@ const createBoardSchema = {
       required: ['name', 'author'],
       properties: {
         name: { type: 'string' },
+        course: { type: 'string' },
+        semester: { type: 'string' },
+        group: { type: 'string' },
         author: { type: 'string' },
         createdAt: { type: 'string' },
         updatedAt: { type: 'string' },
