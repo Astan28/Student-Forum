@@ -2,38 +2,31 @@
 
 const multer = require('fastify-multer');
 const config = require('config');
+
 const mongoose = require('mongoose');
 const fs = require('fs');
 const { promisify } = require('util');
 
-const fastify = require('fastify')();
+// const fastify = require('fastify')();
 const uploadPath = require('path');
 
 const File = require('./File');
 
-fastify.register(require('fastify-static'), {
-  root: uploadPath.join(__dirname, 'public/uploads'),
-  prefix: 'files',
-  list: {
-    format: 'html',
-    render: (dirs, files) => `
-<html><body>
-<ul>
-  ${dirs.map(dir => `<li><a href="${dir.href}">${dir.name}</a></li>`).join('\n  ')}
-</ul>
-<ul>
-  ${files.map(file => `<li><a href="${file.href}" target="_blank">${file.name}</a></li>`).join('\n  ')}
-</ul>
-</body></html>
-`,
-  }
-});
+console.log(uploadPath.join(__dirname, '../public/uploads'));
 
 const unlinkAsync = promisify(fs.unlink);
 
 const { mongoUrl, fileDir } = config;
 
 mongoose.connect(mongoUrl);
+function checkPermissions(user, authorId) {
+  if (user.id === authorId || user.role === 'ADMIN') return true;
+  return false;
+}
+function isAdmin(user) {
+  if (user.role === 'ADMIN') return true;
+  return false;
+}
 
 // const imageFilter = function (req, file, cb) {
 //   if (
@@ -95,12 +88,14 @@ const getFile = async (req, reply) => {
 };
 
 const uploadFile = async (req, reply) => {
-  console.log('req', req.files);
-  const { files } = req;
+  console.log('req', req);
+  const { files, user } = await req;
+  console.log('author: ', user);
+  console.log('files: ', files);
+  const { thread, post } = req.body;
   const fileArray = [];
-  files.forEach(element => {
+  Array.from(files).forEach(element => {
     console.log('file: ', element);
-    const { thread, post } = req.body;
     const name = element.filename;
     const path = element.destination;
     // const filename = JSON.stringify(req.file);
@@ -108,6 +103,7 @@ const uploadFile = async (req, reply) => {
     const file = new File({
       name,
       path,
+      author: user.id,
       thread,
       post
     });
@@ -123,24 +119,53 @@ const deleteFile = async (req, reply) => {
   const { id } = req.params;
 
   const file = await File.findById(id);
+  const authorId = file.author;
+  const loggedUser = req.user;
   console.log('file: ', file);
-
-  File.findByIdAndDelete(id, (err, docs) => {
-    if (err) {
-      console.log(err);
-    } else {
-      const filepath = (docs.path + docs.name);
-      console.log(filepath);
-      unlinkAsync(filepath);
-      console.log('Removed File : ', docs);
-    }
-  });
-  reply.send({ message: `Post ${id} has been removed` });
+  if (checkPermissions(loggedUser, authorId)) {
+    File.findByIdAndDelete(id, (err, docs) => {
+      if (err) {
+        console.log(err);
+      } else {
+        const filepath = (docs.path + docs.name);
+        console.log(filepath);
+        unlinkAsync(filepath);
+        console.log('Removed File : ', docs);
+      }
+    });
+    reply.send({ message: `Post ${id} has been removed` });
+  } else reply.code(403).send();
 };
+
+const deleteFiles = async (req, reply) => {
+  // const { id } = req.params;
+  // console.log('postId: ', id);
+  const loggedUser = req.user;
+  const files = await File.find(req.query);
+
+  console.log(files);
+  if (isAdmin(loggedUser)) {
+    files.forEach(element => {
+      File.deleteOne({ _id: element.id }, (err, docs) => {
+        if (err) {
+          console.log(err);
+        } else {
+          const filepath = (element.path + element.name);
+          console.log(filepath);
+          unlinkAsync(filepath);
+          console.log('Removed File : ', docs);
+        }
+      });
+    });
+    reply.send(files);
+  } else reply.code(403).send();
+};
+
 module.exports = {
   uploadFile,
   fieldsUpload,
   getFiles,
   getFile,
-  deleteFile
+  deleteFile,
+  deleteFiles
 };

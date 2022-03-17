@@ -63,6 +63,20 @@ const deletePostSchema = {
   },
 };
 
+const deletePostsSchema = {
+  schema: {
+    response: {
+      200: {
+        type: 'array',
+        items: Post,
+        properties: {
+          message: { type: 'string' },
+        },
+      },
+    },
+  },
+};
+
 const updatePostSchema = {
   schema: {
     response: {
@@ -76,5 +90,6 @@ module.exports = {
   getPostsSchema,
   createPostSchema,
   updatePostSchema,
-  deletePostSchema
+  deletePostSchema,
+  deletePostsSchema
 };

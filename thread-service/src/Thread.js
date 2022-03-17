@@ -5,16 +5,20 @@ const mongoose = require('mongoose');
 const threadSchema = new mongoose.Schema({
   name: {
     type: String,
-    unique: true
+    unique: true,
+    required: 'Name is required',
   },
   text: {
-    type: String
+    type: String,
+    required: 'Text is required',
   },
   author: {
+    required: 'Author is required',
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
   board: {
+    required: 'Board is required',
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Board'
   },

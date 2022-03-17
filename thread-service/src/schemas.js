@@ -65,6 +65,19 @@ const deleteThreadSchema = {
   },
 };
 
+const deleteThreadsSchema = {
+  schema: {
+    response: {
+      200: {
+        type: 'array',
+        items: Thread,
+        properties: {
+          message: { type: 'string' },
+        },
+      },
+    },
+  },
+};
 const updateThreadSchema = {
   schema: {
     response: {
@@ -78,5 +91,6 @@ module.exports = {
   getThreadsSchema,
   createThreadSchema,
   updateThreadSchema,
-  deleteThreadSchema
+  deleteThreadSchema,
+  deleteThreadsSchema
 };

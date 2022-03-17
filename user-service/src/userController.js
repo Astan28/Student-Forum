@@ -52,6 +52,13 @@ const registerUser = async (req, reply) => {
     throw new Error('User with this email already exists');
   }
 
+  if (!email.match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
+    throw new Error('wrong email');
+  }
+  if (password.length < 6) {
+    throw new Error('Password must be at least 6 characters');
+  }
+
   const hashedPassword = md5(password).toString();
   const user = new User({
     name,

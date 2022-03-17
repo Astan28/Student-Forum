@@ -2,9 +2,10 @@
 
 const config = require('config');
 const mongoose = require('mongoose');
+const axios = require('axios').default;
 const Board = require('./Board');
 
-const { mongoUrl } = config;
+const { mongoUrl, threadApi } = config;
 
 mongoose.connect(mongoUrl);
 function checkPermissions(user) {
@@ -23,7 +24,7 @@ const getBoard = async (req, reply) => {
   const { id } = req.params;
 
   // const user = users.find(user => user.id === id);
-  const board = await board.findById(id);
+  const board = await Board.findById(id);
   reply.send(board);
 };
 
@@ -31,6 +32,8 @@ const createBoard = async (req, reply) => {
   const {
     name, course, semester, group
   } = req.body;
+  const token = req.headers.authorization;
+  console.log(token);
   const author = req.user.id;
   const loggedUser = req.user;
   console.log(author);
@@ -54,15 +57,22 @@ const createBoard = async (req, reply) => {
   } else reply.code(403).send();
 };
 
-const deleteBoard = (req, reply) => {
+const deleteBoard = async (req, reply) => {
   const { id } = req.params;
   const loggedUser = req.user;
+  const token = req.headers.authorization;
+  console.log(token);
 
   if (checkPermissions(loggedUser)) {
     Board.findByIdAndDelete(id, (err, docs) => {
       if (err) {
         console.log(err);
       } else {
+        axios.delete(`${threadApi}/board/${id}`, {
+          headers: {
+            Authorization: token
+          }
+        });
         console.log('Removed Board : ', docs);
       }
     });
@@ -72,19 +82,18 @@ const deleteBoard = (req, reply) => {
 
 const updateBoard = async (req, reply) => {
   const { id } = req.params;
-  const board = await Board.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: false });
+  const board = await Board.findById(id);
   console.log('board ', board);
   const loggedUser = req.user;
   if (checkPermissions(loggedUser)) {
+    // board = await Board.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: false });
+    board.set(req.body);
     const today = new Date();
     const date = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
     const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
     board.updatedAt = `${date} ${time}`;
-    const { threads } = req.body;
-    console.log(board.threads);
-    console.log(threads);
-    board.threads.push(threads);
     board.save();
+    console.log(board);
     reply.send(board);
   } else reply.code(403).send();
 };

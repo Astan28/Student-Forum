@@ -5,7 +5,7 @@ const User = {
   properties: {
     id: { type: 'string' },
     name: { type: 'string' },
-    // password: { type: 'string' },
+    password: { type: 'string' },
     email: { type: 'string' },
     role: { type: 'string' },
     course: { type: 'string' },

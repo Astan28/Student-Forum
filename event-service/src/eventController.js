@@ -24,7 +24,7 @@ const getEvent = async (req, reply) => {
   const { id } = req.params;
 
   // const user = users.find(user => user.id === id);
-  const event = await event.findById(id);
+  const event = await Event.findById(id);
   reply.send(event);
 };
 
@@ -79,11 +79,13 @@ const deleteEvent = (req, reply) => {
 
 const updateEvent = async (req, reply) => {
   const { id } = req.params;
-  const event = await Event.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: false });
+  // const event = await Event.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: false });
+  const event = await Event.findById(id);
   console.log('event ', event);
   const loggedUser = req.user;
   const authorId = event.author;
   if (checkPermissions(loggedUser, authorId)) {
+    event.set(req.body);
     event.save();
     reply.send(event);
   } else reply.code(403).send();

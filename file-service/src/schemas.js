@@ -6,6 +6,7 @@ const File = {
     id: { type: 'string' },
     name: { type: 'string' },
     path: { type: 'string' },
+    author: { type: 'string' },
     thread: { type: 'string' },
     post: { type: 'string' },
   },
@@ -61,9 +62,23 @@ const deleteFileSchema = {
   },
 };
 
+const deleteFilesSchema = {
+  schema: {
+    response: {
+      200: {
+        type: 'array',
+        items: File,
+        properties: {
+          message: { type: 'string' },
+        },
+      },
+    },
+  },
+};
 module.exports = {
   getFileSchema,
   getFilesSchema,
   createFileSchema,
-  deleteFileSchema
+  deleteFileSchema,
+  deleteFilesSchema
 };

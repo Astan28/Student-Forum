@@ -16,6 +16,7 @@ const {
   getThreadSchema,
   createThreadSchema,
   deleteThreadSchema,
+  deleteThreadsSchema,
   updateThreadSchema
 } = require('./schemas');
 
@@ -24,6 +25,7 @@ const {
   getThread,
   createThread,
   deleteThread,
+  deleteThreads,
   updateThread
 } = require('./threadController');
 
@@ -35,6 +37,7 @@ function threadRoutes(fastify, options, done) {
   fastify.post('/threads', { schema: createThreadSchema, preHandler: verifyToken }, createThread);
 
   fastify.delete('/threads/:id', { schema: deleteThreadSchema, preHandler: verifyToken }, deleteThread);
+  fastify.delete('/threads/board/:id', { schema: deleteThreadsSchema, preHandler: verifyToken }, deleteThreads);
 
   fastify.put('/threads/:id', { schema: updateThreadSchema, preHandler: verifyToken }, updateThread);
 
