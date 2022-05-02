@@ -1,0 +1,26 @@
+@import "../assets/_variables.scss";
+
+.CalendarPage {
+    background-color: $primary !important;
+}
+
+.content {
+    width: 70% ;
+    background-color: $grey;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+
+    p {
+        background-color: $grey;
+    }
+}
+
+.main {
+    background-color: white;
+    width: 96%;
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+    margin-top: 20px;
+    margin-left: 2%;
+}

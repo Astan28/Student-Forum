@@ -1,8 +1,9 @@
 'use strict'
 
-const {verifyToken} = require('./lib/verify-token');
-
+const { verifyToken } = require('./lib/verify-token');
+const User = require('./lib/User');
 module.exports = {
-    verifyToken
+    verifyToken,
+    User
 };
 

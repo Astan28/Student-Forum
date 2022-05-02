@@ -1,0 +1,54 @@
+@import "../assets/_variables.scss";
+.singleFile {
+    float: left;
+}
+.postRow {
+    margin-top: 0;
+    margin-bottom: 0;
+} 
+.cardbody {
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 15px;
+}
+.cardhead {
+    margin-bottom: 0 !important;
+}
+.postText {
+    padding:auto;
+    margin: 0px;
+
+}
+.postButton {
+    margin-left:5px;
+    margin-right: 5px;
+    height: 70%;
+    margin-top: auto;
+    margin-bottom: auto;
+    display: inline-block;
+    
+}
+.adminCol {
+    vertical-align: middle;
+    padding:auto;
+    margin: auto;
+}
+.edit {
+    width: 100%;
+}
+
+.postEditor {
+    margin:auto;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.author {
+    background-color: $grey;
+    padding-top: 5px;
+    margin-left: auto;
+    text-align: center;
+    margin-right: auto;
+}
+.button {
+    display: block;
+}

@@ -1,0 +1,36 @@
+@import "../assets/_variables.scss";
+
+body{
+    background-color: $primary !important;
+}
+.login__form {
+    width: 300px;
+    // height: 70%;
+    margin: auto;
+    margin-top: 5%;
+    padding: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: $grey !important;
+    // border-radius: 5%;
+}
+.form-group {
+    background-color: $grey !important;
+}
+h3 {
+    background-color: $grey;
+    padding-bottom: 10px;
+}
+label {
+    background-color: $grey;
+}
+.forgot-password {
+    margin-top: 10px;
+    background-color: $grey;
+}
+
+.btn {
+    margin-top: 50px;
+    background-color: $primary !important;
+    color: white !important; 
+}

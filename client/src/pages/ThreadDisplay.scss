@@ -1,0 +1,50 @@
+@import "../assets/_variables.scss";
+
+.ThreadDisplay {
+background-color: $primary !important;
+height: fit-content;
+}
+
+.threadContainer {
+    width: 96%;
+    padding: 20px;
+}
+.content {
+
+    h2 {
+        background-color: $primary;
+        color: white;
+        padding: 10px;
+    }
+    .author {
+        background-color: $grey;
+        padding-top: 5px;
+        margin-left: auto;
+        text-align: center;
+        margin-right: auto;
+    }
+    
+    .files{
+        margin-top: 40px;
+    }
+    
+    .attachment {
+        height: 70px;
+        width: 70px;
+        margin-left: 50px;
+    
+    }
+    .attachmentName {
+    width: 200px;
+    }
+    
+    .editButton {
+        margin-left:5px;
+        margin-right: 5px;
+    }
+    
+    .form-group {
+        background-color: white;
+    }
+}
+

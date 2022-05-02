@@ -15,6 +15,11 @@ fastify.register(require('fastify-swagger'), {
     info: { title: 'fastify-api' },
   },
 });
+
+fastify.register(require('fastify-cors'), {
+  // put your options here
+});
+
 fastify.register(require('./src/routes'));
 
 const port = process.env.PORT || 3000;

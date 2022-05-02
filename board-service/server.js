@@ -3,9 +3,7 @@
 require('dotenv').config();
 
 const config = require('config');
-
-console.log(config);
-
+const mongoose = require('mongoose');
 const fastify = require('fastify')({ logger: true });
 
 fastify.register(require('fastify-swagger'), {
@@ -15,7 +13,15 @@ fastify.register(require('fastify-swagger'), {
     info: { title: 'fastify-api' },
   },
 });
+
+fastify.register(require('fastify-cors'), {
+  // put your options here
+});
+
 fastify.register(require('./src/routes'));
+
+const { mongoUrl } = config;
+mongoose.connect(mongoUrl);
 
 const port = process.env.PORT || 3000;
 

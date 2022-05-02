@@ -14,9 +14,12 @@ function checkPermissions(user, authorId) {
 }
 
 const getEvents = async (req, reply) => {
-  let events;
-  if (req.query) events = await Event.find(req.query);
-  else events = await Event.find();
+  const { course, semester, group } = req.query;
+  const databaseQuery = {};
+  if (course) databaseQuery.course = course;
+  if (semester) databaseQuery.semester = semester;
+  if (group) databaseQuery.group = group;
+  const events = await Event.find(databaseQuery);
   reply.send(events);
 };
 
@@ -33,13 +36,13 @@ const createEvent = async (req, reply) => {
     name, description, startDate, finishDate
   } = req.body;
   const author = req.user.id;
-  const { semester, group } = req.user;
+  const { semester, group, course } = req.user;
   console.log(author);
 
   const event = new Event({
-    name, description, author, semester, group, startDate, finishDate
+    name, description, author, course, semester, group, startDate, finishDate
   });
-  event.save();
+  await event.save();
   reply.code(201).send(event);
   // if (checkPermissions(loggedUser)) {
   //   const today = new Date();

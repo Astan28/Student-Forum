@@ -1,0 +1,36 @@
+@import "../assets/_variables.scss";
+
+body {
+    background-color: $grey;
+}
+
+.register__form {
+    width: 300px;
+    margin: auto;
+    margin-top: 50px;
+    background-color: $grey !important;
+    padding: 20px;
+}
+
+.form-group {
+    background-color: $grey;
+}
+h3 {
+    background-color: $grey;
+    padding-bottom: 10px;
+}
+label {
+    background-color: $grey;
+    padding-right: 5px;;
+}
+.forgot-password {
+    margin-top: 10px;
+    background-color: $grey;
+}
+select {
+    background-color: $grey;
+} 
+
+option {
+    background-color: $grey;
+} 

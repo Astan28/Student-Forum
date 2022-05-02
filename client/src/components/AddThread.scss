@@ -1,0 +1,21 @@
+@import "../assets/_variables.scss";
+
+.AddThread {
+background-color: $grey;
+padding: 20px;
+width: 700px;
+    input {
+        margin-bottom: 10px
+    }
+    textarea {
+        margin-bottom: 10px
+    }
+    .btn {
+        margin-right: 20px;
+    }
+}
+h4 {
+    background-color: white;
+    padding: 10px;
+    text-align: center;
+}

@@ -1,0 +1,57 @@
+@import "../assets/_variables.scss";
+
+.NavBar {
+    height: 50px;
+    background-color: black;
+    color: white;
+    width: 100%;
+}
+
+.search {
+    input {
+        margin-top: 10px;
+        width: 230px;
+        margin-bottom: 10px;
+        height: 29.5px;
+        background-color: white;
+
+    }
+    button {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        height: 30px;
+        background-color: $grey;
+        padding-bottom: 0px;
+        padding-top: 0px;
+        vertical-align: 0;
+    }
+    margin-left: 20px;
+    background-color: black;
+    width: 75% !important;
+    float: left;
+
+}
+
+.options {
+    background-color: black;
+    display: flex;
+    float: right;
+    justify-content: space-evenly;
+    height: 50px;
+    width: 500px;
+    margin-top: auto;
+    margin-bottom: auto;
+    button {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        height: 30px;
+        background-color: black;
+        padding-bottom: 0px;
+        padding-top: 0px;
+        vertical-align: 0;
+        border: none;
+        color: white;
+    }
+}

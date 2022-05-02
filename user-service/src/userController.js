@@ -1,26 +1,23 @@
-'use strict';
+"use strict";
 
-const config = require('config');
-const mongoose = require('mongoose');
-const md5 = require('crypto-js/md5');
-const jwt = require('jsonwebtoken');
-const User = require('./User');
+const config = require("config");
+const mongoose = require("mongoose");
+const md5 = require("crypto-js/md5");
+const jwt = require("jsonwebtoken");
+const User = require("./User");
+// const User = require('common/lib/User');
 
 const { mongoUrl } = config;
-const secret = process.env.JWT_SECRET || 'secret';
-console.log(secret);
+const secret = process.env.JWT_SECRET || "secret";
 
 mongoose.connect(mongoUrl);
 
 function checkPermissions(user, id) {
-  console.log(user.id);
-  console.log(id);
-  if (user.id === id || user.role === 'ADMIN') return true;
+  if (user.id === id || user.role === "ADMIN") return true;
   return false;
 }
 
 const getUsers = async (req, reply) => {
-  // const users = await fastify.mongoDb.collection('users');
   let users;
   if (req.query) users = await User.find(req.query);
   else users = await User.find();
@@ -38,25 +35,23 @@ const getUser = async (req, reply) => {
 };
 
 const registerUser = async (req, reply) => {
-  const {
-    name, password, email, role, course, semester, group
-  } = req.body;
+  const { name, password, email, role, course, semester, group } = req.body;
 
   const [userByName] = await User.find({ name });
   if (userByName && userByName.id) {
-    throw new Error('User with this name already exists');
+    throw new Error("User with this name already exists");
   }
 
   const [userByEmail] = await User.find({ email });
   if (userByEmail && userByEmail.id) {
-    throw new Error('User with this email already exists');
+    throw new Error("User with this email already exists");
   }
 
   if (!email.match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
-    throw new Error('wrong email');
+    throw new Error("wrong email");
   }
   if (password.length < 6) {
-    throw new Error('Password must be at least 6 characters');
+    throw new Error("Password must be at least 6 characters");
   }
 
   const hashedPassword = md5(password).toString();
@@ -67,36 +62,37 @@ const registerUser = async (req, reply) => {
     role,
     course,
     semester,
-    group
+    group,
   });
   // const users = [...users, user];
-  user.save();
+  await user.save();
   reply.code(201).send(user);
 };
 
 const loginUser = async (req, reply) => {
-  const {
-    name, password
-  } = req.body;
+  const { name, password } = req.body;
   const hashedPassword = md5(password).toString();
   const [user] = await User.find({ name, password: hashedPassword });
 
   if (!user || !user.id) {
-    throw new Error('User with such credentials does not exist');
+    throw new Error("User with such credentials does not exist");
   }
 
-  const token = jwt.sign({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    course: user.course,
-    semester: user.semester,
-    group: user.group
-  }, secret);
+  const token = jwt.sign(
+    {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      course: user.course,
+      semester: user.semester,
+      group: user.group,
+    },
+    secret
+  );
 
   return reply.send({
-    token
+    token,
   });
 };
 
@@ -110,7 +106,7 @@ const deleteUser = (req, reply) => {
       if (err) {
         console.log(err);
       } else {
-        console.log('Removed User : ', docs);
+        console.log("Removed User : ", docs);
       }
     });
     reply.send({ message: `User ${id} has been removed` });
@@ -123,7 +119,11 @@ const updateUser = async (req, reply) => {
   const { id } = req.params;
   if (checkPermissions(loggedUser, id)) {
     const { password } = req.body;
-    const user = await User.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: true });
+    const user = await User.findOneAndUpdate(
+      { _id: id },
+      { $set: req.body },
+      { new: true }
+    );
     if (password) {
       const hashedPassword = md5(password).toString();
       user.password = hashedPassword;
@@ -139,5 +139,5 @@ module.exports = {
   registerUser,
   deleteUser,
   updateUser,
-  loginUser
+  loginUser,
 };

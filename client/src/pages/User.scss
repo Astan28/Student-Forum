@@ -1,0 +1,60 @@
+@import "../assets/variables";
+
+.User {
+    background-color: $primary;
+}
+.Content {
+    width: 70% ;
+    margin-left: auto;
+    margin-right: auto;
+    height: 900px;
+    background-color: #D4D5D5;
+
+    .mb-3 {
+        background-color: $grey;
+        margin: 20px;
+    }
+    h2 {
+        background-color: $grey;
+        padding: 20px;
+    }
+    h5 {
+        background-color: $primary;
+        color: white;
+        padding: 5px;
+    }
+    .tab-content {
+        background-color: inherit !important;
+        padding-bottom: 50px;
+    }
+    .container {
+        background-color: white;
+        width: 90%;
+        margin:auto;
+        padding: 20px;
+
+    }
+    .row {
+        padding: 10px;
+        background-color: white;
+        display: block;
+        input {
+            width: 300px;
+        }
+    }
+    .userInfo {
+        background-color: white;
+        b {
+            background-color: white;
+        }
+        input {
+            background-color: white;
+            margin-left: 10px;
+        }
+        button {
+            margin: 0px;
+            margin-top: 15px;
+            margin-right: 10px;
+        }
+    }
+}

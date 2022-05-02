@@ -9,7 +9,7 @@ const boardSchema = new mongoose.Schema({
   },
   course: {
     type: String,
-    enum: ['Grafika komputerowa', 'Informatyka']
+    enum: ['Grafika', 'Informatyka']
   },
   semester: {
     type: String,

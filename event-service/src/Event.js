@@ -13,6 +13,10 @@ const eventSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
+  course: {
+    type: String,
+    enum: ['Grafika', 'Informatyka']
+  },
   semester: {
     type: String,
     enum: ['1', '2', '3', '4', '5', '6', '7']

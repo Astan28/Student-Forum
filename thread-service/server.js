@@ -1,21 +1,26 @@
-'use strict';
+"use strict";
 
-require('dotenv').config();
+require("dotenv").config();
 
-const config = require('config');
+const config = require("config");
 
 console.log(config);
 
-const fastify = require('fastify')({ logger: true });
+const fastify = require("fastify")({ logger: true });
 
-fastify.register(require('fastify-swagger'), {
+fastify.register(require("fastify-swagger"), {
   exposeRoute: true,
-  routePrefix: '/docs',
+  routePrefix: "/docs",
   swagger: {
-    info: { title: 'fastify-api' },
+    info: { title: "fastify-api" },
   },
 });
-fastify.register(require('./src/routes'));
+
+fastify.register(require("fastify-cors"), {
+  // put your options here
+});
+
+fastify.register(require("./src/routes"));
 
 const port = process.env.PORT || 3000;
 

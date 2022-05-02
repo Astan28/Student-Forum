@@ -16,6 +16,10 @@ fastify.register(require('fastify-swagger'), {
   },
 });
 
+fastify.register(require('fastify-cors'), {
+  // put your options here
+});
+
 fastify.register(require('./src/routes'));
 
 const { port } = config;

@@ -1,3 +1,5 @@
 node_modules
 **/.env
 public
+.vscode/launch.json
+.vscode/settings.json
