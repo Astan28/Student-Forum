@@ -1,0 +1,5 @@
+{
+    mongoUrl: 'DB_URL',
+    jwtSecret: 'JWT_SECRET',
+    fileDir: 'FILE_DIR'
+}
