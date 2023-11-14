@@ -1,12 +1,15 @@
 'use strict';
 
 const config = require('config');
-const axios = require('axios').default;
-const { isAdmin } = require('common/lib/verify-token');
-const Board = require('./Board');
 
-const { threadApi } = config;
+const mongoose = require('mongoose');
+const { isAdmin } = require('../../common/lib/verify-token');
+const Board = require('./Board');
 const deleteThreads = require('./externalRequests');
+
+const { mongoUrl } = config;
+
+mongoose.connect(mongoUrl);
 
 const getBoards = async (req, reply) => {
   const { course, semester, group } = req.query;
@@ -43,7 +46,7 @@ const createBoard = async (req, reply) => {
       group,
       author,
       createdAt,
-      updatedAt
+      updatedAt,
     });
     try {
       await board.save();
@@ -51,34 +54,30 @@ const createBoard = async (req, reply) => {
       reply.send('Error: unable to create board');
     }
     reply.code(201).send(board);
-  } else reply.code(403).send('You do not have permission to perform this action');
+  } else { reply.code(403).send('You do not have permission to perform this action'); }
 };
 
 const deleteBoard = async (req, reply) => {
   const { id } = req.params;
   const loggedUser = req.user;
   const token = req.headers.authorization;
-
+  let board = null;
   if (isAdmin(loggedUser)) {
     try {
-      const board = await Board.findByIdAndDelete(id);
+      board = await Board.findByIdAndDelete(id);
       if (!board) return reply.code(404).send('board not found');
-      // axios.delete(`${threadApi}/board/${id}`, {
-      //   headers: {
-      //     Authorization: token
-      //   }
-      // });
       try {
         const resp = await deleteThreads(id, token);
-        console.log(resp);
+        console.log('odpowiedz: ', resp);
+        if (resp !== 200) throw new TypeError('threads not deleted');
       } catch (e) {
         return reply.status(502).send(e);
       }
-      return reply.send(board);
     } catch (e) {
       return reply.sendStatus(400);
     }
-  } else reply.code(403).send('You do not have permission to perform this action');
+  } else { reply.code(403).send('You do not have permission to perform this action'); }
+  return reply.code(200).send(board);
 };
 
 const updateBoard = async (req, reply) => {
@@ -96,7 +95,7 @@ const updateBoard = async (req, reply) => {
       reply.send('Error: unable to create board');
     }
     reply.code(201).send(board);
-  } else reply.code(403).send('You do not have permission to perform this action');
+  } else { reply.code(403).send('You do not have permission to perform this action'); }
 };
 
 module.exports = {
@@ -104,5 +103,5 @@ module.exports = {
   getBoards,
   createBoard,
   deleteBoard,
-  updateBoard
+  updateBoard,
 };

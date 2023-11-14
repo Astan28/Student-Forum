@@ -3,12 +3,12 @@
 const config = require('config');
 const fs = require('fastify-static');
 
-console.log('config ', config);
+console.log(config);
 const uploadPath = require('path');
 
 const { jwtSecret } = config;
 
-const { createVerifyToken } = require('common/lib/verify-token');
+const { createVerifyToken } = require('../../common/lib/verify-token');
 
 const { verifyToken } = createVerifyToken(jwtSecret);
 const {

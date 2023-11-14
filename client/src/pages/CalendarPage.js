@@ -16,6 +16,7 @@ const DnDCalendar = withDragAndDrop(Calendar);
 
 const localizer = momentLocalizer(moment);
 
+
 function CalendarPage() {
   const [events, setEvents] = useState([]);
 

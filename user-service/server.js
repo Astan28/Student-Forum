@@ -24,7 +24,7 @@ fastify.register(require('./src/routes'));
 
 const port = process.env.PORT || 3000;
 
-const start = async () => {
+const server = async () => {
   try {
     await fastify.listen(port);
   } catch (error) {
@@ -33,4 +33,6 @@ const start = async () => {
   }
 };
 
-start();
+server();
+
+module.exports = server;

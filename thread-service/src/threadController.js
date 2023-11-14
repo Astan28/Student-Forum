@@ -1,21 +1,21 @@
-"use strict";
+'use strict';
 
-const config = require("config");
-const mongoose = require("mongoose");
-const axios = require("axios").default;
+const config = require('config');
+const mongoose = require('mongoose');
+const axios = require('axios').default;
 // const User = require('common/lib/User');
-const Thread = require("./Thread");
-const User = require("./User");
+const Thread = require('./Thread');
+const User = require('./User');
 
 const { mongoUrl } = config;
 
 mongoose.connect(mongoUrl);
 function checkPermissions(user, authorId) {
-  if (user.id === authorId || user.role === "ADMIN") return true;
+  if (user.id === authorId || user.role === 'ADMIN') return true;
   return false;
 }
 function isAdmin(user) {
-  if (user.role === "ADMIN") return true;
+  if (user.role === 'ADMIN') return true;
   return false;
 }
 
@@ -24,8 +24,8 @@ const getThreads = async (req, reply) => {
   const databaseQuery = {};
   if (board) databaseQuery.board = board;
   const threads = await Thread.find(databaseQuery).populate({
-    path: "author",
-    select: ["name", "role", "course", "semester", "group"],
+    path: 'author',
+    select: ['name', 'role', 'course', 'semester', 'group'],
   });
   reply.send(threads);
 };
@@ -35,8 +35,8 @@ const getThread = async (req, reply) => {
 
   // const user = users.find(user => user.id === id);
   const thread = await Thread.findById(id).populate({
-    path: "author",
-    select: ["name", "role", "course", "semester", "group"],
+    path: 'author',
+    select: ['name', 'role', 'course', 'semester', 'group'],
   });
 
   reply.send(thread);
@@ -59,7 +59,7 @@ const createThread = async (req, reply) => {
   try {
     await thread.save();
   } catch (error) {
-    reply.send("Error: unable to create thread");
+    reply.send('Error: unable to create thread');
   }
   reply.code(201).send(thread);
 };
@@ -86,7 +86,7 @@ const deleteThread = async (req, reply) => {
       if (err) {
         console.log(err);
       } else {
-        console.log("Removed Thread : ", docs);
+        console.log('Removed Thread : ', docs);
       }
     });
     reply.send({ message: `Thread ${id} has been removed` });
@@ -100,7 +100,7 @@ const deleteThreads = async (req, reply) => {
   const token = req.headers.authorization;
   const threads = await Thread.find({ board: id });
   if (isAdmin(loggedUser)) {
-    threads.forEach((element) => {
+    threads.forEach(element => {
       axios.delete(`http://localhost:5010/files?thread=${element.id}`, {
         headers: {
           Authorization: token,
@@ -114,11 +114,11 @@ const deleteThreads = async (req, reply) => {
     });
     Thread.deleteMany({ board: id })
       .then(() => {
-        console.log("Data deleted"); // Success
+        console.log('Data deleted'); // Success
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error); // Failure
-        reply.send("threads could not be deleted");
+        reply.send('threads could not be deleted');
       });
     reply.send(threads);
   } else reply.code(403).send();
@@ -128,7 +128,7 @@ const updateThread = async (req, reply) => {
   const { id } = req.params;
   // const thread = await Thread.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: true });
   const thread = await Thread.findById(id);
-  console.log("thread ", thread);
+  console.log('thread ', thread);
   const authorId = thread.author;
   const loggedUser = req.user;
   if (checkPermissions(loggedUser, authorId)) {

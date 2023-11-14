@@ -9,6 +9,7 @@ import validator from "validator";
 import { updateUser } from "../services/actions/authActions";
 import axios from "axios";
 import { postUrl } from "../config/config";
+import { Link } from "react-router-dom";
 
 export class User extends Component {
   constructor(props) {
@@ -32,15 +33,13 @@ export class User extends Component {
 
   async componentDidMount() {
     // this.setState({boards: await axios.get(`${boardUrl}/boards`)})
-    await axios
-      .get(`${postUrl}/posts?author=61ed97481969a18bae759680`)
-      .then((res) => {
-        const posts = res.data;
-        console.log(posts);
-        this.setState({
-          posts: posts,
-        });
+    await axios.get(`${postUrl}/posts?author=${this.state.id}`).then((res) => {
+      const posts = res.data;
+      console.log(posts);
+      this.setState({
+        posts: posts,
       });
+    });
   }
 
   changeHandler = (e) => {
@@ -161,7 +160,7 @@ export class User extends Component {
               </div>
             </Tab>
 
-            <Tab eventKey="profile" title="Moje posty">
+            <Tab eventKey="profile" title="Moje odpowiedzi">
               {this.state.posts.map((post) => (
                 <div className="container">
                   <Card>

@@ -41,6 +41,22 @@ class Boards extends Component {
       });
   }
 
+  // async componentDidUpdate(prevProps, prevState) {
+  //   if (prevState.boards !== this.state.boards) {
+  //     await axios
+  //     .get(
+  //       `${boardUrl}/boards?course=${this.props.match.params.course}&semester=${this.props.match.params.semester}`
+  //     )
+  //     .then((res) => {
+  //       const boards = res.data;
+  //       console.log(boards);
+  //       this.setState({
+  //         boards: boards,
+  //       });
+  //     });
+  //   }
+  // }
+  
   onClose = () => this.setState({ isOpen: false });
 
   render() {

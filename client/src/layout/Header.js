@@ -10,7 +10,9 @@ const Header = () => {
         history.push("/");
       }}
     >
-      <img src={process.env.PUBLIC_URL + "/WSTI_logo.jpg"} alt="logo"></img>
+      <span>
+        <img src={process.env.PUBLIC_URL + "/WSTI_logo.jpg"} alt="logo"></img>
+      </span>
       <span className="header-text">
         <h1>Forum dla Studentów</h1>
         <h2>Wyższa Szkoła Technologii Informatycznych w Katowicach</h2>

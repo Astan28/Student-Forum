@@ -55,7 +55,7 @@ class AddBoard extends Component {
     return (
       <div className="AddBoard">
         <div className="form-group">
-          <h4>Nazwa sekcji</h4>
+          <h4>Nazwa tablicy</h4>
           <input
             type="text"
             className="form-control"

@@ -2,15 +2,13 @@
 
 const config = require('config');
 
-console.log('config ', config);
-
 const { jwtSecret } = config;
 
-const { createVerifyToken } = require('common/lib/verify-token');
+const { createVerifyToken } = require('../../common/lib/verify-token');
 
-console.log(jwtSecret);
+// console.log(jwtSecret);
 const { verifyToken } = createVerifyToken(jwtSecret);
-console.log(verifyToken);
+// console.log(verifyToken);
 const {
   getPostsSchema,
   getPostSchema,

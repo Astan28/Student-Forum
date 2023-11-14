@@ -61,7 +61,7 @@ class AddPost extends Component {
   render() {
     return (
       <div>
-        <h1>Dodaj nowego Posta</h1>
+        <h1>Dodaj nową odpowiedź</h1>
         <div className="form-group">
           <textarea
             className="form-control"

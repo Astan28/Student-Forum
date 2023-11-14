@@ -1,9 +1,9 @@
-import "./Login.scss";
-import { Link, Redirect } from "react-router-dom";
+import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import { Link, Redirect } from "react-router-dom";
 import { login } from "../services/actions/authActions";
+import "./Login.scss";
 
 export class Login extends Component {
   constructor(props) {

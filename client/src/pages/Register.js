@@ -150,10 +150,6 @@ export class Register extends Component {
 
     if (this.state.matchingPassword === "") {
       this.setState({ matchingPasswordError: "To pole nie może być puste" });
-    } else if (this.state.matchingPassword.length < 6) {
-      this.setState({
-        matchingPasswordError: "Haslo musi miec przynajmniej 6 znaków",
-      });
     } else if (this.state.password !== this.state.matchingPassword) {
       this.setState({ matchingPasswordError: "Hasła nie są takie same" });
     } else this.setState({ matchingPasswordError: "" });
@@ -267,6 +263,11 @@ export class Register extends Component {
           <select name="group" onChange={this.changeHandler}>
             <option value="AZI">AZI</option>
             <option value="BZI">BZI</option>
+            <option value="CZI">CZI</option>
+            <option value="DZI">DZI</option>
+            <option value="ION">ION</option>
+            <option value="TIN">TIN</option>
+            <option value="MIION">MIION</option>
           </select>
         </div>
 
